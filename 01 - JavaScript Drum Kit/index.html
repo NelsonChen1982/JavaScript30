@@ -50,6 +50,30 @@
 
 <script>
 
+    function playSound(e){
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+      if (!audio) return; 
+      //避免function空跑
+      audio.currentTime = 0;
+      audio.play();
+      key.classList.add('playing'); 
+      //$('selector').addClass('classname');
+    }
+
+    function removeTransition(e){
+      if(e.propertyName !== 'transform') return; 
+      //如果不是Transform就跳過，transition很多個項目，只取一個來用
+      this.classList.remove('playing');
+      //this會追到使用這個function的元件
+    }
+    
+    const keys = document.querySelectorAll('.key');
+    //在陣列中不能夠直接增加addEventListener
+    keys.forEach(key => key.addEventListener('transitionend',removeTransition));
+    //transitionend 事件会在 CSS transition 结束后触发. 当transition完成前移除transition时，比如移除css的transition-property 属性，事件将不会被触发.如在transition完成前设置  display 为"none"，事件同样不会被触发。
+    window.addEventListener('keydown',playSound);
+
 </script>
 
 
